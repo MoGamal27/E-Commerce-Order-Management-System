@@ -20,6 +20,13 @@
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/dotenv": "^6.1.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.9"
   }
 }
