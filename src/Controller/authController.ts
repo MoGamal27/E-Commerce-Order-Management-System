@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client'
 import * as bcrypt from "bcrypt";
 import { AppError } from "../utils/appError";
 import generateToken from "../middleware/generateJWT";
