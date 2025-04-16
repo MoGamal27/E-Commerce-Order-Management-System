@@ -28,3 +28,18 @@ export const signupValidator = [
 
     validatorMiddleware,
 ];
+
+
+export const signinValidator = [
+    check("email")
+        .notEmpty()
+        .withMessage("email is required")
+        .isEmail()
+        .withMessage("provide a valid email"),
+
+    check("password")
+        .notEmpty()
+        .withMessage("password is required"),
+
+    validatorMiddleware,
+];
