@@ -33,8 +33,30 @@ const signUp = asyncHandler(async (req: Request, res: Response, next: NextFuncti
     });
 
     
-    
+    const login = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+       
+
+        const user = await prisma.user.findUnique({
+             where: {
+                email: req.body.email
+             },
+         });
+ 
+         if(!user ||  !(await bcrypt.compare(req.body.password, user.password))) {
+             return next(new AppError("Incorrect email or password", 401));
+         }
+
+         const token = await generateToken({ id: user.id, role: user.role });
+ 
+         res.status(200).json({
+             status: "success",
+             message: "User logged in successfully",
+             token: token, 
+         });
+         next();
+     });
         
     export { 
-        signUp
+        signUp,
+        login
     };
