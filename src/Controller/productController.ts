@@ -6,14 +6,14 @@ import { AppError } from "../utils/appError";
 const prisma = new PrismaClient();
 
 const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const { title, description, price, quantity, categoryId } = req.body;
+    const { title, description, price, stock, categoryId } = req.body;
 
     const product = await prisma.product.create({
         data: {
             title,
             description,
             price,
-            quantity,
+            stock,
             categoryId,
         },
     });
@@ -37,7 +37,7 @@ const updateProduct = asyncHandler(async (req: Request, res: Response, next: Nex
             title: req.body.title,
             description: req.body.description,
             price: req.body.price,
-            quantity: req.body.quantity,
+            stock: req.body.stock,
             categoryId: req.body.categoryId,
         },
     });
