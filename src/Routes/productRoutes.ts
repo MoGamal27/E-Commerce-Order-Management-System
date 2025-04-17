@@ -8,6 +8,6 @@ router.post('/create', productValidator, createProduct);
 router.put('/update/:id', productValidator, updateProduct);
 router.delete('/delete/:id', deleteProduct);
 router.get('/get/:id', getProduct);
-router.get('/get', getProducts);
+router.get('/all', getProducts);
 
 export default router;

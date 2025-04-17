@@ -20,6 +20,8 @@ model User {
   role      Role     @default(CUSTOMER) 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  carts     Cart[]
+  orders    Order[]
 }
 
 enum Role {
@@ -41,9 +43,46 @@ model Product {
   title     String
   description String
   price     Float
-  quantity  Int
+  stock  Int @default(0)
   categoryId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   category  Category @relation(fields: [categoryId], references: [id])
+  carts     Cart[]
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  totalPrice Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  orders    Order[]
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  cartId    Int
+  shippingAddress String
+  taxPrice  Float?
+  shippingPrice Float?
+  totalPrice Float
+  status    STATUS   @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  cart      Cart     @relation(fields: [cartId], references: [id])
+}
+
+enum STATUS {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
