@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 const { validationResult } = require('express-validator');
 
-const validatorMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+const validatorMiddleware = (req: Request, res: Response, next: NextFunction): void | Response => {
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
     
-    await next();
+    next();
 };
 
-export default  validatorMiddleware;
+export default validatorMiddleware;
