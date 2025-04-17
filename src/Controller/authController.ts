@@ -41,8 +41,12 @@ const signUp = asyncHandler(async (req: Request, res: Response, next: NextFuncti
                 email: req.body.email
              },
          });
+         
+         if(!user){
+            return next(new AppError("User Not exist", 401));
+        }
  
-         if(!user ||  !(await bcrypt.compare(req.body.password, user.password))) {
+         if(!(await bcrypt.compare(req.body.password, user.password))) {
              return next(new AppError("Incorrect email or password", 401));
          }
 
