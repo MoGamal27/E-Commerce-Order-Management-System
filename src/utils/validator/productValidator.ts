@@ -22,11 +22,11 @@ export const productValidator = [
         .isNumeric()
         .withMessage("Price must be a number"),
 
-    check("quantity")
+    check("stock")
         .notEmpty()
-        .withMessage("Quantity is required")
+        .withMessage("Stock is required")
         .isNumeric()
-        .withMessage("Quantity must be a number"),
+        .withMessage("Stock must be a number"),
 
     check("categoryId")
         .notEmpty()
