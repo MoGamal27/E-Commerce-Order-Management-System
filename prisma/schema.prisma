@@ -71,7 +71,7 @@ model Order {
   shippingAddress String
   taxPrice  Float?
   shippingPrice Float?
-  totalPrice Float
+  totalPrice Float?
   status    STATUS   @default(PENDING)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,4 +85,12 @@ enum STATUS {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+model Tax{
+  id        Int      @id @default(autoincrement())
+  taxPrice  Float?
+  shippingPrice Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
