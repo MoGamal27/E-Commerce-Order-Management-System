@@ -83,6 +83,7 @@ const getProduct = asyncHandler(async (req: Request, res: Response, next: NextFu
 });
 
 const getProducts = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+
     const products = await prisma.product.findMany();
 
     res.status(200).json({
@@ -92,4 +93,68 @@ const getProducts = asyncHandler(async (req: Request, res: Response, next: NextF
     next();
 });
 
-export { createProduct, updateProduct, deleteProduct, getProduct, getProducts };
+const getFilteredProducts = asyncHandler(async (req: Request, res: Response) => {
+    const {
+      categoryId,
+      minPrice,
+      maxPrice,
+      inStock,
+      sortBy = 'createdAt',
+      order = 'desc',
+      page = 1,
+      limit = 10
+    } = req.query;
+  
+    const filters: any = {};
+    
+    // Category filter
+    if (categoryId) {
+      filters.categoryId = Number(categoryId);
+    }
+  
+    // Price range filter
+    if (minPrice || maxPrice) {
+      filters.price = {};
+      if (minPrice) filters.price.gte = Number(minPrice);
+      if (maxPrice) filters.price.lte = Number(maxPrice);
+    }
+  
+ // Stock availability filter
+if (inStock === 'true') {
+    filters.stock = { gt: 0 };
+  } else if (inStock === 'false') {
+    filters.stock = { lte: 0 };
+  }
+  
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const products = await prisma.product.findMany({
+      where: filters,
+      include: {
+        category: true
+      },
+      orderBy: {
+        [sortBy as string]: order
+      },
+      skip,
+      take: Number(limit)
+    });
+  
+    const total = await prisma.product.count({ where: filters });
+  
+    res.status(200).json({
+      status: 'success',
+      data: {
+        products,
+        pagination: {
+          total,
+          pages: Math.ceil(total / Number(limit)),
+          currentPage: Number(page),
+          limit: Number(limit)
+        }
+      }
+    });
+  });
+  
+
+export { createProduct, updateProduct, deleteProduct, getProduct, getProducts, getFilteredProducts };
