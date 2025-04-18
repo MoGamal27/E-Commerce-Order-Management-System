@@ -3,6 +3,9 @@ import asyncHandler from "express-async-handler";
 import { PrismaClient } from '@prisma/client'
 import { AppError } from "../utils/appError";
 import sendEmail from "../Services/emailService";
+import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
+import path from 'path';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -198,5 +201,51 @@ const getOrderHistory = asyncHandler(async (req: Request, res: Response, next: N
   });
   next();
 });
+
+export const exportOrders = asyncHandler(async (req: Request, res: Response) => {
+  const orders = await prisma.order.findMany({
+    include: {
+      user: true,
+      cart: {
+        include: {
+          product: true
+        }
+      }
+    }
+  });
+
+  const outputDir = path.join(__dirname, '../exports');
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  const csvFilePath = path.join(outputDir, 'orders.csv');
+  const csvWriter = createCsvWriter({
+    path: csvFilePath,
+    header: [
+      { id: 'orderId', title: 'Order ID' },
+      { id: 'userId', title: 'User ID' },
+      { id: 'productTitle', title: 'Product' },
+      { id: 'shippingAddress', title: 'Shipping Address' },
+      { id: 'totalPrice', title: 'Total Price' },
+      { id: 'status', title: 'Status' },
+      { id: 'createdAt', title: 'Created At' }
+    ]
+  });
+
+  const records = orders.map((order) => ({
+    orderId: order.id,
+    userId: order.userId,
+    productTitle: order.cart.product.title,
+    shippingAddress: order.shippingAddress,
+    totalPrice: order.totalPrice,
+    status: order.status,
+    createdAt: order.createdAt
+  }));
+
+  await csvWriter.writeRecords(records);
+  res.download(csvFilePath, 'orders.csv');
+});
+
 
 export { createOrder, updateAddressOrder, updateStatusOrder, deleteOrder, getOrder, getOrders, getOrderHistory  };
