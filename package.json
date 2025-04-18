@@ -27,13 +27,16 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/nodemailer": "^6.4.17",
     "bcrypt": "^5.1.1",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.5.0",
     "express-async-handler": "^1.2.0",
     "express-rate-limit": "^7.5.0",
     "express-validator": "^7.2.1",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.1",
     "nodemon": "^3.1.9",
+    "path": "^0.12.7",
     "stripe": "^18.0.0"
   }
 }
