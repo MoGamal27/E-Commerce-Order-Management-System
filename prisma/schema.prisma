@@ -85,6 +85,7 @@ enum STATUS {
   SHIPPED
   DELIVERED
   CANCELLED
+  PAID
 }
 
 model Tax{
