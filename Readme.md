@@ -4,6 +4,9 @@
 
 This backend system powers a robust E-Commerce Order Management platform. It provides RESTful APIs for user management, product inventory, order processing, payments, and analytics. Built with Node.js, TypeScript, Express, and Prisma ORM, it emphasizes security, scalability, and maintainability.
 
+## Api Documentation
+[link](https://documenter.getpostman.com/view/37843029/2sB2cd5yZS#774b12d5-d5e8-447e-a2a5-9ad21c39633d)
+
 **Key Features:**
 - User registration, authentication (JWT), and role-based access
 - Product CRUD, filtering, pagination, and caching
@@ -42,7 +45,7 @@ You can deploy the backend using Docker for a consistent and portable environmen
    ```bash
    docker-compose up --build
    ```
-   
+
 
 
 ### Design Decisions
@@ -51,8 +54,9 @@ You can deploy the backend using Docker for a consistent and portable environmen
 3. Modular Structure: Controllers, routes, middleware, and services are separated for clarity and scalability.
 4. JWT Authentication: Secure, stateless user sessions.
 5. Role-based Access: Protects admin routes and sensitive operations.
-6. Caching: Frequently accessed data (e.g., product list) is cached using Redis for performance.
+6. Caching: Frequently accessed data (e.g., product list) is cached using node cache for performance.
 7. Rate Limiting: Implemented via middleware to prevent abuse.
 8. Email Notifications: Nodemailer is used for transactional emails.
 9. Stripe Integration: Secure payment processing.
-
+10. Docker: Containerization for consistent deployment.
+11. Socket.io: Real-time notifications for order updates.
