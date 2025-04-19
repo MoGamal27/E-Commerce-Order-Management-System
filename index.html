@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Test</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>Listening for Order Updates...</h2>
+  <script>
+    const socket = io('http://localhost:3000');
+
+    const orderId = 1; 
+    socket.on('connect', () => {
+      console.log('Connected:', socket.id);
+      socket.emit('join-order-room', orderId);
+    });
+
+    socket.on('order-status-update', (data) => {
+      console.log('Order Status Updated:', data);
+      alert(JSON.stringify(data));
+    });
+  </script>
+</body>
+</html>

@@ -6,6 +6,9 @@ import sendEmail from "../Services/emailService";
 import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
 import path from 'path';
 import fs from 'fs';
+import { getIO } from '../config/socket';
+
+
 
 const prisma = new PrismaClient();
 
@@ -79,6 +82,19 @@ const updateStatusOrder = asyncHandler(async (req: Request, res: Response, next:
     subject: "Order Status",
     html: `<p>Order status: ${order.status}</p>`,
   });
+
+    // Emit real-time update via Socket.IO
+   
+    try {
+      const io = getIO(); 
+      io.to(`order-${id}`).emit('order-status-update', {
+        orderId: Number(id),
+        status: order.status,
+        updatedAt: order.updatedAt
+      });
+    } catch (err: any) {
+      console.error('Socket.IO not initialized:', err.message);
+    }
 
   res.status(201).json({
     status: "success",
