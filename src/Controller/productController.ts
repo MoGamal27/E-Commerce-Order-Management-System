@@ -2,8 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
 import { PrismaClient } from '@prisma/client'
 import { AppError } from "../utils/appError";
+import cache from '../config/cache'
 
 const prisma = new PrismaClient();
+
+
 
 const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { title, description, price, stock, categoryId } = req.body;
@@ -109,13 +112,28 @@ const getProduct = asyncHandler(async (req: Request, res: Response, next: NextFu
 });
 
 const getProducts = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-
+    // Check if data exists in cache
+    const cachedProducts = cache.get("products");
+  
+    if (cachedProducts) {
+        res.status(200).json({
+            status: "success",
+            data: cachedProducts,
+        });
+        return next();
+    }
+  
+    // Fetch from database if not in cache
     const products = await prisma.product.findMany();
-
+  
+    // Store in cache
+    cache.set("products", products);
+  
     res.status(200).json({
         status: "success",
         data: products,
     });
+  
     next();
 });
 
