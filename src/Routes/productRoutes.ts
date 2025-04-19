@@ -7,9 +7,9 @@ import { productValidator } from "../utils/validator/productValidator";
 const router = express.Router();
 
 router.post('/create', productValidator, verifyToken, verifyRole("ADMIN"), createProduct);
-router.post('create-bulk', productValidator, verifyToken, verifyRole("ADMIN"), createBulkProducts)
-router.put('/update/:id', productValidator, updateProduct);
-router.delete('/delete/:id', deleteProduct);
+router.post('/create-bulk', verifyToken, verifyRole("ADMIN"), createBulkProducts)
+router.put('/update/:id', productValidator, verifyToken, verifyRole("ADMIN"), updateProduct);
+router.delete('/delete/:id', verifyToken, verifyRole("ADMIN"), deleteProduct);
 router.get('/get/:id', getProduct);
 router.get('/all', getProducts);
 router.get('/filter', getFilteredProducts);

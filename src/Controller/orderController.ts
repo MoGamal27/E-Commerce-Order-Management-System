@@ -66,7 +66,12 @@ const updateStatusOrder = asyncHandler(async (req: Request, res: Response, next:
       status: status.toUpperCase(),
     },
     include: {
-        user: true
+        user: {
+          select: {
+            email: true
+          }
+        }
+         
     }
   });
 

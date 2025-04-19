@@ -30,30 +30,31 @@ const createProduct = asyncHandler(async (req: Request, res: Response, next: Nex
 });
 
 
-const createBulkProducts = asyncHandler(async(req: Request, res: Response, next: NextFunction) =>{
+const createBulkProducts = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+  const { products } = req.body;
   
-  const { title, description, price, stock, categoryId } = req.body;
-
-  const products = await prisma.product.createMany({
-    data: {
-        title,
-        description,
-        price,
-        stock,
-        categoryId,
-    },
-    skipDuplicates: true //Skips records that already exist
-});
-
-     res.status(201).json({
-    status: 'success',
-    message: `Successfully created ${products.count} products`,
-    data: {
-    count: products.count
+  if (!Array.isArray(products)) {
+    res.status(400).json({
+      status: 'error',
+      message: 'Products must be an array'
+    });
+    return next();
   }
- });
-   next();
-})
+  
+  const result = await prisma.product.createMany({
+    data: products,
+    skipDuplicates: true
+  });
+  
+  res.status(201).json({
+    status: 'success',
+    message: `Successfully created ${result.count} products`,
+    data: {
+      count: result.count
+    }
+  });
+  next();
+});
 
 const updateProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
