@@ -16,6 +16,7 @@ This backend system powers a robust E-Commerce Order Management platform. It pro
 - Email notifications (order confirmation, status updates)
 - Admin dashboard analytics (revenue, top products, recent orders)
 - Rate limiting, input validation, and global error handling
+- Real-time notifications for order updates using Socketio
 
 ---
 
