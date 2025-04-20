@@ -20,6 +20,14 @@ This backend system powers a robust E-Commerce Order Management platform. It pro
 
 ---
 
+## Project Structure
+- routes/: Contains all the endpoints definitions for the project.
+- controller/: Contains the business logic and interactions with the database.
+- prisma/: Contains the database models and schemas.  
+-middleware/: Contains the middleware functions used for authentication, authorization, rate limiter and global error handling.
+- utils/: Contains utility functions and helpers shared across different parts of the application.
+-Service: integrate witn nodemailer
+-config: configuration for admin credentials, cache with Node cache and socket io 
 ### 3. Set up environment variables
 
 Create a `.env` file in the root directory and add the following variables:
